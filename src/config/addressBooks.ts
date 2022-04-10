@@ -5,6 +5,11 @@ export const getAddressBookByNetwork = (network: string) => {
       return {
         ETH: "0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE",
         WETH: "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2",
+        DAI: "",
+        ADAI: "",
+        RewardsController: "",
+        AaveV3Pool: "",
+        BreadchainMultisig: "",
       };
 
     case "matic":
@@ -15,6 +20,7 @@ export const getAddressBookByNetwork = (network: string) => {
         ADAI: "0x82E64f49Ed5EC1bC6e43DAD4FC8Af9bb3A2312EE",
         RewardsController: "0x929EC64c34a17401F460460D4B9390518E5B473e",
         AaveV3Pool: "0x794a61358D6845594F94dc1DB02A252b5b4814aD",
+        BreadchainMultisig: "0x6A148b997e6651237F2fCfc9E30330a6480519f0",
       };
 
     case "hardhat":
@@ -25,6 +31,7 @@ export const getAddressBookByNetwork = (network: string) => {
         ADAI: "0x82E64f49Ed5EC1bC6e43DAD4FC8Af9bb3A2312EE",
         RewardsController: "0x929EC64c34a17401F460460D4B9390518E5B473e",
         AaveV3Pool: "0x794a61358D6845594F94dc1DB02A252b5b4814aD",
+        BreadchainMultisig: "0x6A148b997e6651237F2fCfc9E30330a6480519f0",
       };
 
     default: {

@@ -16,13 +16,21 @@ const func: DeployFunction = async (hre: HardhatRuntimeEnvironment) => {
   const { deploy } = deployments;
   const { deployer } = await getNamedAccounts();
 
-  const {DAI, ADAI, AaveV3Pool, RewardsController} = getAddressBookByNetwork(hre.network.name);
+  const {
+    DAI,
+    ADAI,
+    AaveV3Pool,
+    RewardsController,
+    BreadchainMultisig
+  } = getAddressBookByNetwork(hre.network.name);
 
   await deploy("Bread", {
     from: deployer,
     proxy: {
+      proxyContract: 'EIP173Proxy',
+      owner: BreadchainMultisig,
       execute: {
-        methodName: 'intialize',
+        methodName: 'initialize',
         args: ["Breadchain Stablecoin", "BREAD"]
       }
     },
