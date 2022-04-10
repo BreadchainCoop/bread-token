@@ -16,9 +16,17 @@ const func: DeployFunction = async (hre: HardhatRuntimeEnvironment) => {
   const { deploy } = deployments;
   const { deployer } = await getNamedAccounts();
 
+  const {DAI, ADAI, AaveV3Pool, RewardsController} = getAddressBookByNetwork(hre.network.name);
+
   await deploy("Bread", {
     from: deployer,
-    args: [],
+    proxy: {
+      execute: {
+        methodName: 'intialize',
+        args: ["Breadchain Stablecoin", "BREAD"]
+      }
+    },
+    args: [DAI, ADAI, AaveV3Pool, RewardsController],
     log: hre.network.name !== "hardhat" ? true : false,
     //gasPrice: hre.ethers.utils.parseUnits("40", "gwei"),
   });
