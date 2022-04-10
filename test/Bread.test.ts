@@ -29,6 +29,7 @@ describe("Test Bread Contract", function () {
 
     const breadAddress = (await deployments.get("Bread")).address;
     bread = (await ethers.getContractAt('Bread', breadAddress)) as Bread;
+    bread.connect(signer).transferOwnership(await admin.getAddress());
 
     dai = (await ethers.getContractAt("IERC20", addresses.DAI)) as IERC20;
     aDai = (await ethers.getContractAt("IERC20", addresses.ADAI)) as IERC20;
@@ -86,6 +87,30 @@ describe("Test Bread Contract", function () {
         expect(supplyAfter).to.equal(0);
         expect(daiAfter).to.be.gt(daiBefore);
         expect(daiAfter).to.equal(daiBefore.add(supplyBefore));
+    });
+    it("protects owner functions", async function () {
+        await expect(
+            bread.connect(signer).claimYield(0)
+        ).to.be.revertedWith("Ownable: caller is not the owner");
+        await expect(
+            bread.connect(signer).claimRewards()
+        ).to.be.revertedWith("Ownable: caller is not the owner");
+        await expect(
+            bread.connect(signer).rescueToken(ethers.constants.AddressZero, 0)
+        ).to.be.revertedWith("Ownable: caller is not the owner");
+    });
+    it("rescues tokens", async function () {
+        const before = await dai.balanceOf(bread.address);
+        await dai.connect(signer).transfer(bread.address, await dai.balanceOf(await signer.getAddress()));
+        const after = await dai.balanceOf(bread.address);
+        expect(before).to.eq(0);
+        expect(after).to.be.gt(before);
+
+        const adminBefore = await dai.balanceOf(await admin.getAddress());
+        await bread.connect(admin).rescueToken(dai.address, after);
+        const adminAfter = await dai.balanceOf(await admin.getAddress());
+        expect(adminAfter).to.be.gt(adminBefore);
+        expect(adminAfter).to.eq(adminBefore.add(after));
     });
     it("has correct upgradeability", async function () {
       await expect(

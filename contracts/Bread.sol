@@ -74,7 +74,7 @@ contract Bread is
     }
 
     function claimYield(uint256 amount) external onlyOwner nonReentrant {
-        require(amount > 0, "Bread: withdraw 0");
+        require(amount > 0, "Bread: claim 0");
         uint256 yield = _yieldAccrued();
         require(yield >= amount, "Bread: amount exceeds yield accrued");
         pool.withdraw(address(token), amount, owner());
