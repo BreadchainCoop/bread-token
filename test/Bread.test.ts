@@ -77,6 +77,13 @@ describe("Test Bread Contract", function () {
         expect(breadFinal).to.equal(breadAfter.add(daiBeforeAdmin.sub(daiAfterAdmin)));
     });
     it("burns", async function () {
+
+        const aDaiBalance = await aDai.balanceOf(bread.address);
+        expect(aDaiBalance).to.be.gt(0);
+        await expect(
+            bread.connect(admin).rescueToken(aDai.address, 1)
+        ).to.be.revertedWith("Bread: cannot withdraw collateral");
+
         // burn and credit underlying to an acct
         const supplyBefore = await bread.totalSupply();
         const daiBefore = await dai.balanceOf(await admin.getAddress());
