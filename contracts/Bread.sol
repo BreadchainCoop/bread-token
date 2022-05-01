@@ -101,6 +101,16 @@ contract Bread is
         return _yieldAccrued();
     }
 
+    function rewardsAccrued()
+        external
+        view
+        returns (address[] memory rewardsList, uint256[] memory unclaimedAmounts)
+    {
+        address[] memory assets;
+        assets[0] = address(aToken);
+        return rewards.getAllUserRewards(assets, address(this));
+    }
+
     function _yieldAccrued() internal view returns (uint256) {
         return aToken.balanceOf(address(this)) - totalSupply();
     }
