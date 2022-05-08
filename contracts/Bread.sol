@@ -73,7 +73,7 @@ contract Bread is
         emit Burned(receiver, amount);
     }
 
-    function claimYield(uint256 amount) external onlyOwner nonReentrant {
+    function claimYield(uint256 amount) external nonReentrant {
         require(amount > 0, "Bread: claim 0");
         uint256 yield = _yieldAccrued();
         require(yield >= amount, "Bread: amount exceeds yield accrued");
@@ -81,7 +81,7 @@ contract Bread is
         emit ClaimedYield(amount);
     }
 
-    function claimRewards() external onlyOwner {
+    function claimRewards() external nonReentrant {
         address[] memory assets;
         assets[0] = address(aToken);
         (
