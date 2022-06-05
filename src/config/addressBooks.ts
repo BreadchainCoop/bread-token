@@ -21,6 +21,7 @@ export const getAddressBookByNetwork = (network: string) => {
         RewardsController: "0x929EC64c34a17401F460460D4B9390518E5B473e",
         AaveV3Pool: "0x794a61358D6845594F94dc1DB02A252b5b4814aD",
         BreadchainMultisig: "0x6A148b997e6651237F2fCfc9E30330a6480519f0",
+        BreadProxy: "0x11d9efDf4Ab4A3bfabf5C7089F56AA4F059AA14C",
       };
 
     case "hardhat":
@@ -32,6 +33,7 @@ export const getAddressBookByNetwork = (network: string) => {
         RewardsController: "0x929EC64c34a17401F460460D4B9390518E5B473e",
         AaveV3Pool: "0x794a61358D6845594F94dc1DB02A252b5b4814aD",
         BreadchainMultisig: "0x6A148b997e6651237F2fCfc9E30330a6480519f0",
+        BreadProxy: "0x11d9efDf4Ab4A3bfabf5C7089F56AA4F059AA14C",
       };
 
     default: {

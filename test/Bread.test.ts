@@ -97,12 +97,6 @@ describe("Test Bread Contract", function () {
     });
     it("protects owner functions", async function () {
         await expect(
-            bread.connect(signer).claimYield(0)
-        ).to.be.revertedWith("Ownable: caller is not the owner");
-        await expect(
-            bread.connect(signer).claimRewards()
-        ).to.be.revertedWith("Ownable: caller is not the owner");
-        await expect(
             bread.connect(signer).rescueToken(ethers.constants.AddressZero, 0)
         ).to.be.revertedWith("Ownable: caller is not the owner");
     });

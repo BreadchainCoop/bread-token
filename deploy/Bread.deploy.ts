@@ -36,14 +36,16 @@ const func: DeployFunction = async (hre: HardhatRuntimeEnvironment) => {
     },
     args: [DAI, ADAI, AaveV3Pool, RewardsController],
     log: hre.network.name !== "hardhat" ? true : false,
-    gasPrice: hre.ethers.utils.parseUnits("50", "gwei"),
+    //gasPrice: hre.ethers.utils.parseUnits("50", "gwei"),
   });
 };
 
 export default func;
 
 func.skip = async (hre: HardhatRuntimeEnvironment) => {
-  const shouldSkip = false //hre.network.name === "matic";
+  const shouldSkip =
+    hre.network.name === "matic" ||
+    hre.network.name === "goerli";
   return shouldSkip ? true : false;
 };
 
