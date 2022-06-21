@@ -6,6 +6,9 @@ import "@nomiclabs/hardhat-ethers";
 import "@typechain/hardhat";
 import "hardhat-deploy";
 
+// CUSTOM TASKS
+import "./tasks/mintDAI";
+
 // Process Env Variables
 import * as dotenv from "dotenv";
 dotenv.config({ path: __dirname + "/.env" });
@@ -36,6 +39,12 @@ const config: HardhatUserConfig = {
       accounts: PK ? [PK] : [],
       chainId: 137,
       url: `https://polygon-mainnet.g.alchemy.com/v2/${ALCHEMY_ID}`,
+    },
+
+    mumbai: {
+      accounts: PK ? [PK] : [],
+      chainId: 80001,
+      url: `https://polygon-mumbai.g.alchemy.com/v2/${ALCHEMY_ID}`,
     },
   },
 
