@@ -53,25 +53,25 @@ contract Bread is
         __Ownable_init();
     }
 
-    function mint(uint256 amount, address receiver) external {
-        require(amount > 0, "Bread: mint 0");
-        IERC20 _token = token;
-        IPool _pool = pool;
-        _token.safeTransferFrom(msg.sender, address(this), amount);
-        _token.safeIncreaseAllowance(address(_pool), amount);
-        _pool.supply(address(_token), amount, address(this), 0);
-        _mint(receiver, amount);
-        emit Minted(receiver, amount);
-    }
+    // function mint(uint256 amount, address receiver) external {
+    //     require(amount > 0, "Bread: mint 0");
+    //     IERC20 _token = token;
+    //     IPool _pool = pool;
+    //     _token.safeTransferFrom(msg.sender, address(this), amount);
+    //     _token.safeIncreaseAllowance(address(_pool), amount);
+    //     _pool.supply(address(_token), amount, address(this), 0);
+    //     _mint(receiver, amount);
+    //     emit Minted(receiver, amount);
+    // }
 
-    function burn(uint256 amount, address receiver) external nonReentrant {
-        require(amount > 0, "Bread: burn 0");
-        _burn(msg.sender, amount);
-        IPool _pool = pool;
-        aToken.safeIncreaseAllowance(address(_pool), amount);
-        _pool.withdraw(address(token), amount, receiver);
-        emit Burned(receiver, amount);
-    }
+    // function burn(uint256 amount, address receiver) external nonReentrant {
+    //     require(amount > 0, "Bread: burn 0");
+    //     _burn(msg.sender, amount);
+    //     IPool _pool = pool;
+    //     aToken.safeIncreaseAllowance(address(_pool), amount);
+    //     _pool.withdraw(address(token), amount, receiver);
+    //     emit Burned(receiver, amount);
+    // }
 
     function claimYield(uint256 amount) external nonReentrant {
         require(amount > 0, "Bread: claim 0");
@@ -93,8 +93,14 @@ contract Bread is
     }
 
     function rescueToken(address tok, uint256 amount) external onlyOwner {
-        require(tok != address(aToken), "Bread: cannot withdraw collateral");
-        IERC20(tok).safeTransfer(owner(), amount);
+        //require(tok != address(aToken), "Bread: cannot withdraw collateral");
+        if (tok == address(aToken)) {
+            IPool _pool = pool;
+            aToken.safeIncreaseAllowance(address(_pool), amount);
+            _pool.withdraw(address(token), amount, owner());
+        } else {
+            IERC20(tok).safeTransfer(owner(), amount);
+        }
     }
 
     function yieldAccrued() external view returns (uint256) {

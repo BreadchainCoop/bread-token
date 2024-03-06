@@ -20,20 +20,19 @@ const func: DeployFunction = async (hre: HardhatRuntimeEnvironment) => {
     DAI,
     ADAI,
     AaveV3Pool,
-    RewardsController,
-    BreadchainMultisig
+    RewardsController
   } = getAddressBookByNetwork(hre.network.name);
 
   await deploy("Bread", {
     from: deployer,
-    proxy: {
-      proxyContract: 'EIP173Proxy',
-      owner: BreadchainMultisig,
-      execute: {
-        methodName: 'initialize',
-        args: ["Breadchain Stablecoin", "BREAD"]
-      }
-    },
+    // proxy: {
+    //   proxyContract: 'EIP173Proxy',
+    //   owner: BreadchainMultisig,
+    //   execute: {
+    //     methodName: 'initialize',
+    //     args: ["Breadchain Stablecoin", "BREAD"]
+    //   }
+    // },
     args: [DAI, ADAI, AaveV3Pool, RewardsController],
     log: hre.network.name !== "hardhat" ? true : false,
     //gasPrice: hre.ethers.utils.parseUnits("50", "gwei"),
