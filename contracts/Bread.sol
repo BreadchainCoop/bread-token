@@ -5,6 +5,10 @@ pragma solidity 0.8.7;
 // which earns yield in Aave for the Breadchain Ecosystem
 // implemented by: kassandra.eth
 
+// NOTE: THIS VERSION IS FOR MIGRATION PURPOSES ONLY
+// IT IS NOT SECURE AGAINST A MALICIOUS OWNER
+// WHO HAS THE POWER TO WITHDRAW BACKING VIA rescueToken()
+
 import {SafeERC20, IERC20} from "@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol";
 import {
     ERC20Upgradeable
