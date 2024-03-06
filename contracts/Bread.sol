@@ -77,13 +77,13 @@ contract Bread is
     //     emit Burned(receiver, amount);
     // }
 
-    function claimYield(uint256 amount) external nonReentrant {
-        require(amount > 0, "Bread: claim 0");
-        uint256 yield = _yieldAccrued();
-        require(yield >= amount, "Bread: amount exceeds yield accrued");
-        pool.withdraw(address(token), amount, owner());
-        emit ClaimedYield(amount);
-    }
+    // function claimYield(uint256 amount) external nonReentrant {
+    //     require(amount > 0, "Bread: claim 0");
+    //     uint256 yield = _yieldAccrued();
+    //     require(yield >= amount, "Bread: amount exceeds yield accrued");
+    //     pool.withdraw(address(token), amount, owner());
+    //     emit ClaimedYield(amount);
+    // }
 
     function claimRewards() external nonReentrant {
         address[] memory assets;
@@ -107,9 +107,9 @@ contract Bread is
         }
     }
 
-    function yieldAccrued() external view returns (uint256) {
-        return _yieldAccrued();
-    }
+    // function yieldAccrued() external view returns (uint256) {
+    //     return _yieldAccrued();
+    // }
 
     function rewardsAccrued()
         external
@@ -121,7 +121,7 @@ contract Bread is
         return rewards.getAllUserRewards(assets, address(this));
     }
 
-    function _yieldAccrued() internal view returns (uint256) {
-        return aToken.balanceOf(address(this)) - totalSupply();
-    }
+    // function _yieldAccrued() internal view returns (uint256) {
+    //     return aToken.balanceOf(address(this)) - totalSupply();
+    // }
 }
