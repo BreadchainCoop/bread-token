@@ -77,6 +77,7 @@ async function getSmartContractCount(tokenAddress: string) {
     console.log("Unique holders length:", unique_holders.length);
     const total_supply_from_view_method = await tokenContract.totalSupply();
     let total_supply_sanity_check = BigInt(0);
+    let total_supply_eoa = BigInt(0);
     for (const address of unique_holders) {
         try{
             const balance = BigInt(await tokenContract.balanceOf(address));
@@ -85,9 +86,10 @@ async function getSmartContractCount(tokenAddress: string) {
                 smartContractData.push({ address, balance: balance});
                 total_supply_sanity_check = total_supply_sanity_check + balance;
                 smartContractCount++;
-            } else if (balance > 0) { // Assuming you only care about accounts with a balance
+            } else if (balance > 0) { 
                 nonSmartContractData.push({ address, balance: balance.toString() });
                 total_supply_sanity_check += balance;
+                total_supply_eoa += balance;
             }
         }
         catch(error){
@@ -105,6 +107,7 @@ async function getSmartContractCount(tokenAddress: string) {
 
     }
     console.log("Smart contract count:" ,smartContractCount);
+    console.log("Total supply EOA",total_supply_eoa);
         
     // Writing to CSV files
     await smartContractCsvWriter.writeRecords(smartContractData)
@@ -113,23 +116,6 @@ async function getSmartContractCount(tokenAddress: string) {
     await nonSmartContractCsvWriter.writeRecords(nonSmartContractData)
         .then(() => console.log('Non-smart contract accounts with balance have been written to CSV file.'));
     // Create a json file with the same data 
-    const jsonContent = JSON.stringify(smartContractData);
-    fs.writeFile("smart_contracts_with_balance.json", jsonContent, 'utf8', function (err: any) {
-        if (err) {
-            console.log("An error occured while writing JSON Object to File.");
-            return console.log(err);
-        }
-        console.log("Smart contract accounts with balance has been saved.");
-    });
-
-    const nonSmartContractJsonContent = JSON.stringify(nonSmartContractData);
-    fs.writeFile("non_smart_contracts_with_balance.json", nonSmartContractJsonContent, 'utf8', function (err: any) {
-        if (err) {
-            console.log("An error occured while writing JSON Object to File.");
-            return console.log(err);
-        }
-        console.log("Non-smart contract accounts with balance has been saved.");
-    });
     process.exit(0);
 }
 
