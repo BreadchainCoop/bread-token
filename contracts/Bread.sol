@@ -5,10 +5,6 @@ pragma solidity 0.8.7;
 // which earns yield in Aave for the Breadchain Ecosystem
 // implemented by: kassandra.eth
 
-// NOTE: THIS VERSION IS FOR MIGRATION PURPOSES ONLY
-// IT IS NOT SECURE AGAINST A MALICIOUS OWNER
-// WHO HAS THE POWER TO WITHDRAW BACKING VIA rescueToken()
-
 import {SafeERC20, IERC20} from "@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol";
 import {
     ERC20Upgradeable
@@ -57,33 +53,33 @@ contract Bread is
         __Ownable_init();
     }
 
-    // function mint(uint256 amount, address receiver) external {
-    //     require(amount > 0, "Bread: mint 0");
-    //     IERC20 _token = token;
-    //     IPool _pool = pool;
-    //     _token.safeTransferFrom(msg.sender, address(this), amount);
-    //     _token.safeIncreaseAllowance(address(_pool), amount);
-    //     _pool.supply(address(_token), amount, address(this), 0);
-    //     _mint(receiver, amount);
-    //     emit Minted(receiver, amount);
-    // }
+    function mint(uint256 amount, address receiver) external {
+        require(amount > 0, "Bread: mint 0");
+        IERC20 _token = token;
+        IPool _pool = pool;
+        _token.safeTransferFrom(msg.sender, address(this), amount);
+        _token.safeIncreaseAllowance(address(_pool), amount);
+        _pool.supply(address(_token), amount, address(this), 0);
+        _mint(receiver, amount);
+        emit Minted(receiver, amount);
+    }
 
-    // function burn(uint256 amount, address receiver) external nonReentrant {
-    //     require(amount > 0, "Bread: burn 0");
-    //     _burn(msg.sender, amount);
-    //     IPool _pool = pool;
-    //     aToken.safeIncreaseAllowance(address(_pool), amount);
-    //     _pool.withdraw(address(token), amount, receiver);
-    //     emit Burned(receiver, amount);
-    // }
+    function burn(uint256 amount, address receiver) external nonReentrant {
+        require(amount > 0, "Bread: burn 0");
+        _burn(msg.sender, amount);
+        IPool _pool = pool;
+        aToken.safeIncreaseAllowance(address(_pool), amount);
+        _pool.withdraw(address(token), amount, receiver);
+        emit Burned(receiver, amount);
+    }
 
-    // function claimYield(uint256 amount) external nonReentrant {
-    //     require(amount > 0, "Bread: claim 0");
-    //     uint256 yield = _yieldAccrued();
-    //     require(yield >= amount, "Bread: amount exceeds yield accrued");
-    //     pool.withdraw(address(token), amount, owner());
-    //     emit ClaimedYield(amount);
-    // }
+    function claimYield(uint256 amount) external nonReentrant {
+        require(amount > 0, "Bread: claim 0");
+        uint256 yield = _yieldAccrued();
+        require(yield >= amount, "Bread: amount exceeds yield accrued");
+        pool.withdraw(address(token), amount, owner());
+        emit ClaimedYield(amount);
+    }
 
     function claimRewards() external nonReentrant {
         address[] memory assets;
@@ -97,19 +93,13 @@ contract Bread is
     }
 
     function rescueToken(address tok, uint256 amount) external onlyOwner {
-        //require(tok != address(aToken), "Bread: cannot withdraw collateral");
-        if (tok == address(aToken)) {
-            IPool _pool = pool;
-            aToken.safeIncreaseAllowance(address(_pool), amount);
-            _pool.withdraw(address(token), amount, owner());
-        } else {
-            IERC20(tok).safeTransfer(owner(), amount);
-        }
+        require(tok != address(aToken), "Bread: cannot withdraw collateral");
+        IERC20(tok).safeTransfer(owner(), amount);
     }
 
-    // function yieldAccrued() external view returns (uint256) {
-    //     return _yieldAccrued();
-    // }
+    function yieldAccrued() external view returns (uint256) {
+        return _yieldAccrued();
+    }
 
     function rewardsAccrued()
         external
@@ -121,7 +111,7 @@ contract Bread is
         return rewards.getAllUserRewards(assets, address(this));
     }
 
-    // function _yieldAccrued() internal view returns (uint256) {
-    //     return aToken.balanceOf(address(this)) - totalSupply();
-    // }
+    function _yieldAccrued() internal view returns (uint256) {
+        return aToken.balanceOf(address(this)) - totalSupply();
+    }
 }
