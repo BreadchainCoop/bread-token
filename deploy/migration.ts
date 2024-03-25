@@ -1,5 +1,4 @@
 import { ethers, Contract } from "ethers";
-import fs from 'fs';
 import BreadABI from "../artifacts/contracts/Bread.sol/Bread.json"
 import * as dotenv from 'dotenv';
 dotenv.config();
