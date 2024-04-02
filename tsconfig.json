@@ -10,7 +10,7 @@
     "typeRoots": ["./node_modules/@types"],
     "outDir": "dist"
   },
-  "files": ["hardhat.config.ts"],
+  "files": ["hardhat.config.ts", "./deploy/getSmartContractCount.ts"],
   "include": ["deploy", "test", "typechain"],
   "exclude": ["node_modules"]
 }

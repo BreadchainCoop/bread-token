@@ -56,5 +56,8 @@
   "lint-staged": {
     "*.*{js,sol,json,md,ts,yml,yaml}": "prettier --write",
     "*.*{ts,js}": "eslint -c .eslintrc.json"
+  },
+  "dependencies": {
+    "csv-writer": "^1.6.0"
   }
 }
